@@ -14,55 +14,105 @@ let songs = [];
 let currFolder = "";
 let currentSongIndex = 0;
 
+// previous with default link
+// async function getSongs(folder) {
+//     currFolder = folder;
+//     let a = await fetch(`http://127.0.0.1:3000/${folder}/`)
+//     let response = await a.text()
+
+//     // div
+//     let div = document.createElement("div");
+//     div.innerHTML = response;
+//     let as = div.getElementsByTagName("a");
+
+//     songs = [];
+//     for (let i = 0; i < as.length; i++) {
+//         const href = as[i].href;
+//         if (href.endsWith(".mp3")) {
+//             // decode and keep the real filename (unmodified)
+//             let filename = decodeURIComponent(href.replaceAll("%5C", "/").split("/")[6]);
+//             songs.push(filename);
+//         }
+//     }
+//     // listing the songs in library
+//     // let songUL = document.querySelector(".songList ul").getElementsByTagName("ul");// simpler alternative
+
+//     let songUL = document.querySelector(".songList").getElementsByTagName("ul")[0];
+//     songUL.innerHTML = "";
+
+//     for (const song of songs) { // why for of ...as we are talking about arrrays
+
+//         const li = document.createElement("li");
+//         li.dataset.file = song; // store real filename
+//         let displayName = song.replace("(DjPunjab.Com)", "").trim();
+//         li.innerHTML = `<img class="invert" src="img/music.svg" alt="">
+//             <div class="info">
+//                 <small>${displayName}</small>
+//             </div>
+//             <div class="playNow">
+//                 <small>Play Now</small>
+//                 <img width="25" class="invert" src="img/play.svg" alt="">
+//             </div>`;
+
+//         // adding click feature to all 'li'
+//         li.addEventListener("click", () => {
+//             playSong(li.dataset.file);
+//         });
+//         songUL.appendChild(li);
+//         // we can also do by sir method
+//     }
+
+//     return songs; // <--- IMPORTANT: return the array so callers can await it
+// }
+
 async function getSongs(folder) {
     currFolder = folder;
-    let a = await fetch(`http://127.0.0.1:3000/${folder}/`)
-    let response = await a.text()
 
-    // div
-    let div = document.createElement("div");
-    div.innerHTML = response;
-    let as = div.getElementsByTagName("a");
+    try {
+        const response = await fetch(`/${folder}/info.json`);
+        const data = await response.json();
 
-    songs = [];
-    for (let i = 0; i < as.length; i++) {
-        const href = as[i].href;
-        if (href.endsWith(".mp3")) {
-            // decode and keep the real filename (unmodified)
-            let filename = decodeURIComponent(href.replaceAll("%5C", "/").split("/")[6]);
-            songs.push(filename);
+        songs = data.songs || [];
+
+        let songUL = document.querySelector(".songList").getElementsByTagName("ul")[0];
+        songUL.innerHTML = "";
+
+        for (const song of songs) {
+
+            const li = document.createElement("li");
+            li.dataset.file = song;
+
+            let displayName = song
+                .replace("(DjPunjab.Com)", "")
+                .replace(".mp3", "")
+                .trim();
+
+            li.innerHTML = `
+                <img class="invert" src="img/music.svg" alt="">
+                <div class="info">
+                    <small>${displayName}</small>
+                </div>
+                <div class="playNow">
+                    <small>Play Now</small>
+                    <img width="25" class="invert" src="img/play.svg" alt="">
+                </div>
+            `;
+
+            li.addEventListener("click", () => {
+                playSong(li.dataset.file);
+            });
+
+            songUL.appendChild(li);
         }
+
+        return songs;
+
+    } catch (error) {
+        console.error("Error loading songs:", error);
+        return [];
     }
-    // listing the songs in library
-    // let songUL = document.querySelector(".songList ul").getElementsByTagName("ul");// simpler alternative
-
-    let songUL = document.querySelector(".songList").getElementsByTagName("ul")[0];
-    songUL.innerHTML = "";
-
-    for (const song of songs) { // why for of ...as we are talking about arrrays
-
-        const li = document.createElement("li");
-        li.dataset.file = song; // store real filename
-        let displayName = song.replace("(DjPunjab.Com)", "").trim();
-        li.innerHTML = `<img class="invert" src="img/music.svg" alt="">
-            <div class="info">
-                <small>${displayName}</small>
-            </div>
-            <div class="playNow">
-                <small>Play Now</small>
-                <img width="25" class="invert" src="img/play.svg" alt="">
-            </div>`;
-
-        // adding click feature to all 'li'
-        li.addEventListener("click", () => {
-            playSong(li.dataset.file);
-        });
-        songUL.appendChild(li);
-        // we can also do by sir method
-    }
-
-    return songs; // <--- IMPORTANT: return the array so callers can await it
 }
+
 
 const playSong = (track, pause = false) => {
     if (!track) {
@@ -94,94 +144,181 @@ const playSong = (track, pause = false) => {
     }
 }
 
+// previous with default link
+// async function displayAlbums() {
+//     // fetch the directory HTML (same var name 'a' you used)
+//     const a = await fetch('http://127.0.0.1:3000/songs/');
+//     const response = await a.text(); // response is the page HTML text
+
+//     // parse HTML into a temporary div (same var 'div')
+//     const div = document.createElement('div');
+//     div.innerHTML = response;
+
+//     const anchors = div.getElementsByTagName('a');
+//     const cardContainer = document.querySelector('.cardContainer');
+
+//     cardContainer.innerHTML = ''; // clear old cards
+
+//     const array = Array.from(anchors);
+
+//     for (let index = 0; index < array.length; index++) {
+//         const e = array[index];
+
+//         // IMPORTANT: read the raw href attribute (not e.href which gives absolute URL)
+//         let rawHref = e.getAttribute('href');
+//         if (!rawHref) continue;
+
+//         // decode percent-encoding then normalize backslashes to forward slashes
+//         rawHref = decodeURIComponent(rawHref);        // "%5Csongs%5CAmmy%20Songs/" -> "\songs\Ammy Songs/"
+//         let normalized = rawHref.replace(/\\/g, '/'); // "\ -> /"
+//         normalized = normalized.replace(/\/+/g, '/'); // collapse multiple slashes
+//         normalized = normalized.replace(/^(\.\.\/|\.\/)+/, ''); // remove leading ../ or ./
+//         normalized = normalized.replace(/^\/+/, ''); // remove leading slashes
+
+//         // split into parts and require the first part to be 'songs'
+//         const parts = normalized.split('/').filter(Boolean);
+//         // why this ? 
+//         //     But if normalized = "../"
+//         // then parts = []
+//         // parts[0] !== 'songs' ❌
+//         // → so it will continue (skip this link).
+//         if (parts[0] !== 'songs' || !parts[1]) continue;
+
+
+//         const folder = parts[1]; // folder name (keeps spaces)
+
+//         // fetch info.json (use encodeURIComponent for spaces and special chars)
+//         try {
+//             const a2 = await fetch(`http://127.0.0.1:3000/songs/${encodeURIComponent(folder)}/info.json`);
+//             if (!a2.ok) {
+//                 console.warn('info.json not found for', folder, a2.status);
+//                 continue;
+//             }
+//             const response2 = await a2.json(); // I used response2 so we don't redeclare `response`
+
+//             // build a card element and append (avoid innerHTML += which can clobber listeners)
+//             const card = document.createElement('div');
+//             card.className = 'card rounded';
+//             card.dataset.folder = folder;
+//             card.innerHTML = `
+//         <div class="cover">
+//           <img src="/songs/${encodeURIComponent(folder)}/cover.jpeg" alt="${response2.title || ''}">
+//           <div class="play">
+//             <svg width="35" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+//               <circle cx="50" cy="50" r="48" fill="green" />
+//               <polygon points="40,30 70,50 40,70" fill="black" />
+//             </svg>
+//           </div>
+//         </div>
+//         <h4>${response2.title || ''}</h4>
+//         <small>${response2.description || ''}</small>
+//       `;
+//             cardContainer.appendChild(card);
+
+//         } catch (err) {
+//             console.warn('Error loading info for', folder, err);
+//         }
+//     }
+
+//     // attach click listeners to cards (safe after cards are created)
+//     const cards = Array.from(document.getElementsByClassName('card'));
+//     cards.forEach(c => {
+//         // attach once
+//         if (c._listenerAttached) return;
+//         c.addEventListener('click', async item => {
+//             // use same style as your code: call getSongs then playSong
+//             await getSongs(`songs/${encodeURIComponent(item.currentTarget.dataset.folder)}`);
+//             if (Array.isArray(songs) && songs[0]) playSong(songs[0]);
+//         });
+//         c._listenerAttached = true;
+//     });
+// }
+
+
 async function displayAlbums() {
-    // fetch the directory HTML (same var name 'a' you used)
-    const a = await fetch('http://127.0.0.1:3000/songs/');
-    const response = await a.text(); // response is the page HTML text
 
-    // parse HTML into a temporary div (same var 'div')
-    const div = document.createElement('div');
-    div.innerHTML = response;
+    const cardContainer = document.querySelector(".cardContainer");
 
-    const anchors = div.getElementsByTagName('a');
-    const cardContainer = document.querySelector('.cardContainer');
+    cardContainer.innerHTML = "";
 
-    cardContainer.innerHTML = ''; // clear old cards
+    const folders = [
+        "Ammy Songs",
+        "Amrit Maan",
+        "Bass",
+        "Diljit Songs",
+        "Favourites",
+        "Jazzy B",
+        "K. Billa songs",
+        "Karan Aujla Songs",
+        "Rajvir",
+        "Shubh",
+        "Surjit Binderakhiya"
+    ];
 
-    const array = Array.from(anchors);
+    for (const folder of folders) {
 
-    for (let index = 0; index < array.length; index++) {
-        const e = array[index];
-
-        // IMPORTANT: read the raw href attribute (not e.href which gives absolute URL)
-        let rawHref = e.getAttribute('href');
-        if (!rawHref) continue;
-
-        // decode percent-encoding then normalize backslashes to forward slashes
-        rawHref = decodeURIComponent(rawHref);        // "%5Csongs%5CAmmy%20Songs/" -> "\songs\Ammy Songs/"
-        let normalized = rawHref.replace(/\\/g, '/'); // "\ -> /"
-        normalized = normalized.replace(/\/+/g, '/'); // collapse multiple slashes
-        normalized = normalized.replace(/^(\.\.\/|\.\/)+/, ''); // remove leading ../ or ./
-        normalized = normalized.replace(/^\/+/, ''); // remove leading slashes
-
-        // split into parts and require the first part to be 'songs'
-        const parts = normalized.split('/').filter(Boolean);
-        // why this ? 
-        //     But if normalized = "../"
-        // then parts = []
-        // parts[0] !== 'songs' ❌
-        // → so it will continue (skip this link).
-        if (parts[0] !== 'songs' || !parts[1]) continue;
-
-
-        const folder = parts[1]; // folder name (keeps spaces)
-
-        // fetch info.json (use encodeURIComponent for spaces and special chars)
         try {
-            const a2 = await fetch(`http://127.0.0.1:3000/songs/${encodeURIComponent(folder)}/info.json`);
-            if (!a2.ok) {
-                console.warn('info.json not found for', folder, a2.status);
-                continue;
-            }
-            const response2 = await a2.json(); // I used response2 so we don't redeclare `response`
 
-            // build a card element and append (avoid innerHTML += which can clobber listeners)
-            const card = document.createElement('div');
-            card.className = 'card rounded';
+            const response = await fetch(
+                `/songs/${encodeURIComponent(folder)}/info.json`
+            );
+
+            if (!response.ok) continue;
+
+            const data = await response.json();
+
+            const card = document.createElement("div");
+
+            card.className = "card rounded";
+
             card.dataset.folder = folder;
+
             card.innerHTML = `
-        <div class="cover">
-          <img src="/songs/${encodeURIComponent(folder)}/cover.jpeg" alt="${response2.title || ''}">
-          <div class="play">
-            <svg width="35" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="50" cy="50" r="48" fill="green" />
-              <polygon points="40,30 70,50 40,70" fill="black" />
-            </svg>
-          </div>
-        </div>
-        <h4>${response2.title || ''}</h4>
-        <small>${response2.description || ''}</small>
-      `;
+                <div class="cover">
+                    <img src="/songs/${encodeURIComponent(folder)}/cover.jpeg"
+                         alt="${data.title}">
+                    <div class="play">
+                        <svg width="35"
+                             height="100"
+                             viewBox="0 0 100 100"
+                             xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="50"
+                                    cy="50"
+                                    r="48"
+                                    fill="green" />
+                            <polygon points="40,30 70,50 40,70"
+                                     fill="black" />
+                        </svg>
+                    </div>
+                </div>
+
+                <h4>${data.title}</h4>
+                <small>${data.description}</small>
+            `;
+
+            card.addEventListener("click", async () => {
+
+                await getSongs(
+                    `songs/${encodeURIComponent(folder)}`
+                );
+
+                if (songs.length > 0) {
+                    playSong(songs[0]);
+                }
+            });
+
             cardContainer.appendChild(card);
 
-        } catch (err) {
-            console.warn('Error loading info for', folder, err);
+        } catch (error) {
+
+            console.error(
+                `Error loading album ${folder}:`,
+                error
+            );
         }
     }
+}   
 
-    // attach click listeners to cards (safe after cards are created)
-    const cards = Array.from(document.getElementsByClassName('card'));
-    cards.forEach(c => {
-        // attach once
-        if (c._listenerAttached) return;
-        c.addEventListener('click', async item => {
-            // use same style as your code: call getSongs then playSong
-            await getSongs(`songs/${encodeURIComponent(item.currentTarget.dataset.folder)}`);
-            if (Array.isArray(songs) && songs[0]) playSong(songs[0]);
-        });
-        c._listenerAttached = true;
-    });
-}
 async function main() {
     // list of all songs
     await getSongs("songs/Bass")
