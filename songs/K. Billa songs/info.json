@@ -1,4 +1,14 @@
 {
-    "title" : "Kulwinder Billa",
-    "description" : "Nostalgic"
+  "title": "Kulwinder Billa",
+  "description": "Kulwinder Billa songs",
+  "songs": [
+    "12 Mahine.mp3",
+    "Angreji Wai Madam.mp3",
+    "Antenna.mp3",
+    "College Yaadan.mp3",
+    "Gupp Marda.mp3",
+    "Light Weight.mp3",
+    "Palazzo.mp3",
+    "TIME TABLE.mp3"
+  ]
 }

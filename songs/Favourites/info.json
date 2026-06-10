@@ -1,4 +1,18 @@
 {
-    "title" : "Sidhu Moose Wala",
-    "description" : "All Favourites"
+  "title": "Favourites",
+  "description": "Favourite songs",
+  "songs": [
+    "24 25 26 - Rajvir Jawanda.mp3",
+    "Badfella.mp3",
+    "Bambiha Bolle.mp3",
+    "Burberry.mp3",
+    "College-Kulwinder.mp3",
+    "Dollar.mp3",
+    "Munda Apne Viah De Vich Balkar Sidhu.mp3",
+    "Outlaw.mp3",
+    "Sanu Tedi Tedi - Surjit Bindrakhiya.mp3",
+    "TIME TABLE - KULWINDER BILLA.mp3",
+    "Teeje Week Jordan Sandhu.mp3",
+    "Teri Jatti - Ammy Virk.mp3"
+  ]
 }

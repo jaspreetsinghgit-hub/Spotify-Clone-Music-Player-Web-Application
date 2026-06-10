@@ -1,4 +1,14 @@
 {
-    "title" : "Bass Boosted",
-    "description" : "Bass Boosted songs brouhhh!"
+  "title": "Bass",
+  "description": "Bass collection",
+  "songs": [
+    "Badfella Sidhu Moose Wala.mp3",
+    "Burberry Sidhu Moose Wala.mp3",
+    "Dollar Sidhu Moosewala.mp3",
+    "G.O.A.T. Karan Aujla.mp3",
+    "High End Diljit Dosanjh.mp3",
+    "INSANE AP DHILLON _ GURINDER GILL.mp3",
+    "Jatt Life Varinder Brar.mp3",
+    "Karan Aujla Haan Haige aa Gurlez Akhtar.mp3"
+  ]
 }

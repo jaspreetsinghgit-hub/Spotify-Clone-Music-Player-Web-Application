@@ -1,4 +1,7 @@
 {
-    "title" : "Shubh",
-    "description" : "Hot Hits"
+  "title": "Shubh",
+  "description": "Fire and car songs",
+  "songs": [
+    "Rollin.mp3"
+  ]
 }

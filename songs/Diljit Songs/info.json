@@ -1,4 +1,17 @@
 {
-    "title" : "Diljit Dosanjh",
-    "description" : "Fun, Party, Beat, and lot more"
+  "title": "Diljit Dosanjh",
+  "description": "Diljit songs collection",
+  "songs": [
+    "Alrhaan Kuaariaan.mp3",
+    "Born to shine.mp3",
+    "Clash.mp3",
+    "GOAT Bass Boosted.mp3",
+    "GOAT.mp3",
+    "High End.mp3",
+    "Ishq Ho Gaya.mp3",
+    "Pagg Wala Munda.mp3",
+    "Raat di Gedi.mp3",
+    "Surma.mp3",
+    "Veervaar.mp3"
+  ]
 }

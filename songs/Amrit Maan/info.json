@@ -1,4 +1,9 @@
 {
-    "title" : "Amrit Maan",
-    "description" : "For car vibes"
+  "title": "Amrit Maan",
+  "description": "Amrit Maan collection",
+  "songs": [
+    "Akh Da Nishana.mp3",
+    "BAMBIHA BOLE.mp3",
+    "Bamb Jatt.mp3"
+  ]
 }
