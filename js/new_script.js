@@ -69,7 +69,7 @@ async function getSongs(folder) {
     currFolder = folder;
 
     try {
-        const response = await fetch(`/${folder}/info.json`);
+        const response = await fetch(`${folder}/info.json`);
         const data = await response.json();
 
         songs = data.songs || [];
@@ -260,7 +260,7 @@ async function displayAlbums() {
         try {
 
             const response = await fetch(
-                `/songs/${encodeURIComponent(folder)}/info.json`
+                `songs/${encodeURIComponent(folder)}/info.json`
             );
 
             if (!response.ok) continue;
@@ -275,7 +275,7 @@ async function displayAlbums() {
 
             card.innerHTML = `
                 <div class="cover">
-                    <img src="/songs/${encodeURIComponent(folder)}/cover.jpeg"
+                    <img src="songs/${encodeURIComponent(folder)}/cover.jpeg"
                          alt="${data.title}">
                     <div class="play">
                         <svg width="35"
