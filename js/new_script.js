@@ -121,7 +121,8 @@ const playSong = (track, pause = false) => {
 
     // we have not chnged the filename ..so now we are encoding it so spaced + special chars work in URL
     let encodedTrack = encodeURIComponent(track);
-    currentSong.src = `/${currFolder}/` + encodedTrack;
+    currentSong.src = `${currFolder}/${encodedTrack}`;
+    console.log(currentSong.src);
     // currentSong.load();
 
     // setting index safely
